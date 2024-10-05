@@ -1,0 +1,60 @@
+name: Build MacOS
+run-name: Build MacOS
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  Build_MacOS_intel:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache
+
+      - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
+      - run: flutter pub get
+      - run: flutter build macos --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-macos-intel.zip
+          path: build/macos/Build/Products/Release/pica_comic.app
+
+  Build_MacOS_arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache
+
+      - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
+      - run: flutter pub get
+      - run: flutter build macos --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-macos-arm64.zip
+          path: build/macos/Build/Products/Release/pica_comic.app

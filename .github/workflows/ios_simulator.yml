@@ -1,20 +1,60 @@
-name: Build IOS SIMULATOR
-run-name: Build IOS SIMULATOR
+name: Build iOS Simulator
+run-name: Build iOS Simulator
+
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch: {}
+
 jobs:
-  Build_IOS_SIMULATOR:
+  Build_iOS_Simulator_intel:
     runs-on: macos-13
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
         architecture: x64
+
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.pub-cache
+          flutter/.pub-cache
+        key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pub-cache
+
     - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
     - run: flutter pub get
     - run: flutter build ios --simulator --no-codesign
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: build_files
-        path: /Users/runner/work/PicaComic/PicaComic/build/ios/iphonesimulator
+        name: PicaComic-ios-simulator-intel.zip
+        path: build/ios/iphonesimulator
+
+  Build_iOS_Simulator_arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache
+
+      - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
+      - run: flutter pub get
+      - run: flutter build ios --simulator --no-codesign
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-ios-simulator-arm64.zip
+          path: build/ios/iphonesimulator

@@ -1,0 +1,39 @@
+name: Build iOS
+run-name: Build iOS
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  Build_iOS:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache
+
+      - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
+      - run: |
+          mkdir -p build/ios/iphoneos/Payload
+          mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload
+          cd build/ios/iphoneos/
+          zip -r PicaComic-ios.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-ios.ipa
+          path: build/ios/iphoneos/PicaComic-ios.ipa
