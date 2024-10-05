@@ -22,17 +22,23 @@ jobs:
           path: |
             ~/.pub-cache
             flutter/.pub-cache
-          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          key: ${{ runner.os }}-intel-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pub-cache
+            ${{ runner.os }}-intel-pub-cache
 
       - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
       - run: flutter pub get
       - run: flutter build macos --release
+      - run: |
+          cd build/macos/Build/Products/Release/
+          mkdir build_files
+          hdiutil create -volname "PicaComic" -srcfolder pica_comic.app -ov -format UDZO PicaComic-macos-intel.dmg
+          zip -r PicaComic-macos-intel.zip pica_comic.app
+          mv PicaComic-macos-intel.zip build_files/
       - uses: actions/upload-artifact@v4
         with:
-          name: PicaComic-macos-intel.zip
-          path: build/macos/Build/Products/Release/pica_comic.app
+          name: PicaComic-macos-intel
+          path: build/macos/Build/Products/Release/build_files
 
   Build_MacOS_arm64:
     runs-on: macos-latest
@@ -47,14 +53,20 @@ jobs:
           path: |
             ~/.pub-cache
             flutter/.pub-cache
-          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          key: ${{ runner.os }}-arm64-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pub-cache
+            ${{ runner.os }}-arm64-pub-cache
 
       - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
       - run: flutter pub get
       - run: flutter build macos --release
+      - run: |
+          cd build/macos/Build/Products/Release/
+          mkdir build_files
+          hdiutil create -volname "PicaComic" -srcfolder pica_comic.app -ov -format UDZO PicaComic-macos-arm64.dmg
+          zip -r PicaComic-macos-arm64.zip pica_comic.app
+          mv PicaComic-macos-arm64.zip build_files/
       - uses: actions/upload-artifact@v4
         with:
-          name: PicaComic-macos-arm64.zip
-          path: build/macos/Build/Products/Release/pica_comic.app
+          name: PicaComic-macos-arm64
+          path: build/macos/Build/Products/Release/build_files

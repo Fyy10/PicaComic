@@ -21,9 +21,9 @@ jobs:
           path: |
             ~/.pub-cache
             flutter/.pub-cache
-          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          key: ${{ runner.os }}-arm64-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pub-cache
+            ${{ runner.os }}-arm64-pub-cache
 
       - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
       - run: flutter pub get
@@ -35,5 +35,5 @@ jobs:
           zip -r PicaComic-ios.ipa Payload
       - uses: actions/upload-artifact@v4
         with:
-          name: PicaComic-ios.ipa
+          name: PicaComic-ios
           path: build/ios/iphoneos/PicaComic-ios.ipa
