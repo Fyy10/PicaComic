@@ -8,39 +8,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  Build_MacOS_intel:
-    runs-on: macos-13
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          architecture: x64
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            flutter/.pub-cache
-          key: ${{ runner.os }}-intel-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-intel-pub-cache
-
-      - run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app
-      - run: flutter pub get
-      - run: flutter build macos --release
-      - run: |
-          cd build/macos/Build/Products/Release/
-          mkdir build_files
-          hdiutil create -volname "PicaComic" -srcfolder pica_comic.app -ov -format UDZO PicaComic-macos-intel.dmg
-          zip -r PicaComic-macos-intel.zip pica_comic.app
-          mv PicaComic-macos-intel.zip build_files/
-      - uses: actions/upload-artifact@v4
-        with:
-          name: PicaComic-macos-intel
-          path: build/macos/Build/Products/Release/build_files
-
-  Build_MacOS_arm64:
+  Build_MacOS:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,10 +31,10 @@ jobs:
       - run: |
           cd build/macos/Build/Products/Release/
           mkdir build_files
-          hdiutil create -volname "PicaComic" -srcfolder pica_comic.app -ov -format UDZO PicaComic-macos-arm64.dmg
-          zip -r PicaComic-macos-arm64.zip pica_comic.app
-          mv PicaComic-macos-arm64.zip build_files/
+          hdiutil create -volname "PicaComic" -srcfolder pica_comic.app -ov -format UDZO PicaComic-macos-universal.dmg
+          zip -r PicaComic-macos-universal.zip pica_comic.app
+          mv PicaComic-macos-universal.* build_files/
       - uses: actions/upload-artifact@v4
         with:
-          name: PicaComic-macos-arm64
+          name: PicaComic-macos-universal
           path: build/macos/Build/Products/Release/build_files
