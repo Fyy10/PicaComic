@@ -25,7 +25,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-amd64-pub-cache
 
-      - run: python3 windows/build_windows.py
+      - run: |
+          wget -O ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/refs/heads/main/Files/Languages/Unofficial/ChineseSimplified.isl
+          mv ChineseSimplified.isl "C:\Program Files (x86)\Inno Setup 6\Languages"
+          python3 windows/build_windows.py
+
       - uses: actions/upload-artifact@v4
         with:
           name: PicaComic-windows-portable
@@ -33,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: PicaComic-windows-installer
-          path: build/windows/PicaComic-windows-installer
+          path: build/windows/PicaComic-windows-installer.exe
