@@ -1,0 +1,36 @@
+name: Build Windows
+run-name: Build Windows
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  Build_Windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/.pub-cache
+          key: ${{ runner.os }}-amd64-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-amd64-pub-cache
+
+      - run: python3 windows/build_windows.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-windows-portable
+          path: build/windows/x64/runner/Release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-windows-installer
+          path: build/windows/PicaComic-windows-installer

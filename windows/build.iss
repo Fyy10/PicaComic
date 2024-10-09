@@ -3,8 +3,8 @@
 
 #define MyAppName "Pica Comic"
 #define MyAppVersion "{{version}}"
-#define MyAppPublisher "wgh136"
-#define MyAppURL "https://github.com/wgh136/PicaComic"
+#define MyAppPublisher "Fyy10"
+#define MyAppURL "https://github.com/Fyy10/PicaComic"
 #define MyAppExeName "pica_comic.exe"
 #define RootPath "{{root_path}}"
 
@@ -25,7 +25,8 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir={#RootPath}\build\windows
-OutputBaseFilename=PicaComic-{#MyAppVersion}-windows-installer
+; OutputBaseFilename=PicaComic-{#MyAppVersion}-windows-installer
+OutputBaseFilename=PicaComic-windows-installer
 SetupIconFile={#RootPath}\windows\runner\resources\app_icon.ico
 Compression=lzma
 SolidCompression=yes
