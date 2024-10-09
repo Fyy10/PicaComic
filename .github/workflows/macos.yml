@@ -30,9 +30,13 @@ jobs:
       - run: flutter build macos --release
       - run: |
           cd build/macos/Build/Products/Release/
+          mv pica_comic.app PicaComic.app
+          zip -r PicaComic-macos-universal.zip PicaComic.app
+          mkdir build_dmg
+          mv PicaComic.app build_dmg/
+          ln -s /Applications build_dmg/Applications
+          hdiutil create -volname "PicaComic" -srcfolder build_dmg -ov -format UDZO PicaComic-macos-universal.dmg
           mkdir build_files
-          hdiutil create -volname "PicaComic" -srcfolder pica_comic.app -ov -format UDZO PicaComic-macos-universal.dmg
-          zip -r PicaComic-macos-universal.zip pica_comic.app
           mv PicaComic-macos-universal.* build_files/
       - uses: actions/upload-artifact@v4
         with:
