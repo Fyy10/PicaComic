@@ -1,0 +1,39 @@
+name: Build Android
+run-name: Build Android
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: { }
+
+jobs:
+  Build_Android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            flutter/.pub-cache
+          key: ${{ runner.os }}-amd64-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-amd64-pub-cache
+
+      - run: |
+          flutter pub get
+          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > android/app/keystore.jks
+          echo "${{ secrets.ANDROID_KEY_PROPERTIES }}" > android/key.properties
+          flutter build apk --release
+          mv build/app/outputs/flutter-apk/app-release.apk PicaComic-android.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PicaComic-android
+          path: PicaComic-android.apk

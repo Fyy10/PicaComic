@@ -5,6 +5,11 @@
 [![Download](https://img.shields.io/github/v/release/wgh136/PicaComic)](https://github.com/wgh136/PicaComic/releases)
 [![stars](https://img.shields.io/github/stars/wgh136/PicaComic)](https://github.com/wgh136/PicaComic/stargazers)
 
+The original author archived this [project](https://github.com/wgh136/PicaComic) on Oct. 1st, 2024.
+I forked this project as a backup and to provide some personal builds.
+This project is not actively maintained, and is merely used for learning purpose.
+If you are looking for an active fork, please refer to this [project](https://github.com/Pacalini/PicaComic).
+
 A comic app with multiple sources built with flutter.
 
 ## How to use
@@ -66,4 +71,3 @@ The Chinese translation of the manga tags is from this project.
 <img src="screenshots/9.png" style="width: 400px"><img src="screenshots/10.png" style="width: 400px">
 
 <img src="screenshots/1.png" style="width: 400px"><img src="screenshots/2.png" style="width: 400px"><img src="screenshots/3.png" style="width: 400px"><img src="screenshots/4.png" style="width: 400px"><img src="screenshots/5.png" style="width: 400px"><img src="screenshots/6.png" style="width: 400px"><img src="screenshots/7.png" style="width: 400px">
-
